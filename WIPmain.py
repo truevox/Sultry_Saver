@@ -18,6 +18,7 @@ from adafruit_circuitplayground.express import cpx
 # microcontroller.on_next_reset(microcontroller.RunMode.BOOTLOADER)
 
 # Set this to True to turn on the capacitive touch tones
+My_Debug = True
 
 # NeoPixel color names
 WHITE = (50, 50, 50)
@@ -30,7 +31,7 @@ BLUE = (0, 0, 255)
 PURPLE = (180, 0, 255)
 
 # Not too bright!
-#cpx.pixels.brightness = 0.2
+cpx.pixels.brightness = 0.2
 
 def wheel(pos):
     # Input a value 0 to 255 to get a color value.
@@ -54,16 +55,6 @@ def Temp_convert(temp, unit):
     if unit == "f":
         temp = (temp - 32)  / 9.0 * 5.0
         return temp #"%s degrees Celsius"% temp
-
-def scale(val, src, dst):
-    """
-    Scale the given value from the scale of src (SouRCe) to the scale of dst (DeSTination).
-    """
-    return ((val - src[0]) / (src[1]-src[0])) * (dst[1]-dst[0]) + dst[0]
-
- #print scale(0, (0.0, 99.0), (-1.0, +1.0))
- #print scale(1, (0.0, 99.0), (-1.0, +1.0))
- #print scale(99, (0.0, 99.0), (-1.0, +1.0))
 
 
 cpx.play_file("Coin.wav")   # Play a coin sound on boot
@@ -90,59 +81,51 @@ while True:
 
     My_Debug = cpx.switch
 
-    if My_Debug == True:
-        # Water_temp = (((Temp_convert(cpx.temperature,"c") * .05 ) * 4**5) - 4260)
-        Water_temp = Temp_convert(cpx.temperature,"c")
-        while cpx.touch_A1:
-            Water_temp = 40.0
-        while cpx.touch_A2:
-            Water_temp = 65.0
-        while cpx.touch_A3:
-            Water_temp = 85.0
-        while cpx.touch_A4:
-            Water_temp = 105.0
-        while cpx.touch_A5:
-            Water_temp = 115.0
-        while cpx.touch_A6:
-            Water_temp = 125.0
-        while cpx.touch_A7:
-            Water_temp = 145.0
+    if My_Debug:
+        Water_temp = (((Temp_convert(cpx.temperature,"c") * .05 ) * 4**5) - 4260)
+        if cpx.touch_A4:
+            Water_temp = 150.0
+        if cpx.touch_A2:
+            Water_temp = 50.0
 
-    elif My_Debug == False:
+
+    elif My_Debug != True:
         Water_temp = Temp_convert(cpx.temperature,"c")
 
 
-    while Water_temp > -160.0:
+    if Water_temp > -160.0:
         cpx.pixels[0] = WHITE
        # Test_lights[0] = WHITE
        # Test_lights[1:9] = OFF
-    while Water_temp > 60.0:
+    if Water_temp > 60.0:
         cpx.pixels[1] = BLUE
        # Test_lights[2] = WHITE
        # Test_lights[2:] = OFF
-    while Water_temp > 80.0:
+    if Water_temp > 80.0:
         cpx.pixels[2] = GREEN
-    while Water_temp > 100.0:
+    if Water_temp > 100.0:
         cpx.pixels[3] = PURPLE
-    while Water_temp > 110.0:
+    if Water_temp > 110.0:
         cpx.pixels[4] = YELLOW
-    while Water_temp > 120.0:
+    if Water_temp > 120.0:
         cpx.pixels[5] = YELLOW
-    while Water_temp > 130.0:
+    if Water_temp > 130.0:
         cpx.pixels[6] = RED
-    while Water_temp > 140.0:
+    if Water_temp > 140.0:
         cpx.pixels[7] = RED
-    #else:
-    #    cpx.pixels.fill = ((0,0,0))
+    else:
+        cpx.pixels.fill = ((0,0,0))
+    time.sleep(1)
+    print(Water_temp)
+    print(My_Debug)
 
     if Water_temp > 120:
         cpx.red_led = True
     elif Water_temp <= 120:
         cpx.red_led = False
-
     time.sleep(1)
     print(Water_temp)
-    print("Debugging is set to", My_Debug, "and temp readings are", not My_Debug)
+    print(My_Debug)
     cpx.pixels.fill = OFF
     
     if Water_temp > 120:
@@ -186,6 +169,3 @@ while True:
 
 
     # loop to the beginning!'''
-#=======
-#print("Hello World!"
-#>>>>>>> master
