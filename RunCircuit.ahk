@@ -36,7 +36,7 @@ NewVer = 0
     Progress, w250,,, Hold yer ponies,  I'm downloading the newist D:\main.py…
     FileCopy, D:\main.py, D:\main.py.bak, 1
     Progress, 25
-    FileCopy, D:\main.py, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py.bak, 1
+    FileCopy, D:\main.py, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py.bak, 1  ; Come back and make C:\etc into a single variable, so I can call the same thing everywhere.
     Progress, 75
     UrlDownloadToFile, https://raw.githubusercontent.com/truevox/Sultry_Saver/master/main.py, D:\main.py ;*[ShortcutToolkit]
     Progress, 100
@@ -49,7 +49,7 @@ NewVer = 0
 ^+b:: ;c Push an update directly from the CPE on D:\ to the repo- currently ONLY pulls main.py.
 {
     Progress, w250,,, Hold yer ponies,  I'm pushing the newist D:\main.py to the repo…
-    FileCopy, D:\main.py, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py.bak, 1
+    FileCopy, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py.bak, 1
     Progress, 25
     FileCopy, D:\main.py, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py, 1
     Progress, 75

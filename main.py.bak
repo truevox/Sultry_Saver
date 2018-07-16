@@ -82,12 +82,19 @@ last_switch = cpx.switch
  
 uart = busio.UART(board.TX, board.RX, baudrate=9600)
 
+def DebugTrigger():
+    '''Returns what ever switch triggers the "Debugging" code
+    >>> DebugTrigger()
+    cpx.switch
+    '''
+    return cpx.switch
+
 
 Test_lights = cpx.pixels
 
 while True:
-
-    My_Debug = cpx.switch
+    
+    My_Debug = DebugTrigger()
 
     if My_Debug == True:
         # Water_temp = (((Temp_convert(cpx.temperature,"c") * .05 ) * 4**5) - 4260)
