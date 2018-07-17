@@ -5,6 +5,7 @@ import busio
 import sys
 import board
 from adafruit_circuitplayground.express import cpx
+from adafruit_circuitplayground.express import touchio
 
 
 #try:
@@ -89,73 +90,98 @@ def DebugTrigger():
     '''
     return cpx.switch
 
-
+Touch_Debug_40 = touchio.TouchIn(board.A1)
+Touch_Debug_65 = touchio.TouchIn(board.A2)
+Touch_Debug_105 = touchio.TouchIn(board.A3)
+Touch_Debug_115 = touchio.TouchIn(board.A4)
+Touch_Debug_125 = touchio.TouchIn(board.A5)
+Touch_Debug_145 = touchio.TouchIn(board.A6)
+Touch_Debug_180 = touchio.TouchIn(board.A7)
 Test_lights = cpx.pixels
+
+# cpx.touchio.TouchIn
+
+
+
+def Water_Temp_Setter():
+    # Water_temp = (((Temp_convert(cpx.temperature,"c") * .05 ) * 4**5) - 4260)
+    Set_Temp = Temp_convert(cpx.temperature,"c")
+    if My_Debug == True:
+        if cpx.touch_A7:
+            return 180.0
+        elif cpx.touch_A6:
+            return 145.0
+        elif cpx.touch_A5:
+            return 125.0
+        elif cpx.touch_A4:
+            return 115.0
+        elif cpx.touch_A3:
+            return 105.0
+        elif cpx.touch_A2:
+            return 65.0
+        elif cpx.touch_A1:
+            return 40.0
+        else:
+            return Set_Temp
+    else:
+        return Set_Temp
+
+
+
+
+def Water_Temp_Indicator(Processed_Water_Temp):
+    # Note to self, refactor this with elif statements that set a range of pixels
+    if Processed_Water_Temp > 160.0:
+        cpx.pixels[1] = RED
+    else:
+       cpx.pixels[1] = OFF
+    if Processed_Water_Temp > 140.0:
+        cpx.pixels[2] = RED
+    else:
+       cpx.pixels[2] = OFF
+    if Processed_Water_Temp > 130.0:
+        cpx.pixels[3] = RED
+    else:
+       cpx.pixels[3] = OFF
+    if Processed_Water_Temp > 120.0:
+        cpx.pixels[4] = YELLOW
+    else:
+       cpx.pixels[4] = OFF
+    if Processed_Water_Temp > 110.0:
+        cpx.pixels[5] = YELLOW
+    else:
+       cpx.pixels[5] = OFF
+    if Processed_Water_Temp > 100.0:
+        cpx.pixels[6] = PURPLE
+    else:
+       cpx.pixels[6] = OFF
+    if Processed_Water_Temp > 80.0:
+        cpx.pixels[7] = GREEN
+    else:
+       cpx.pixels[7] = OFF
+    if Processed_Water_Temp > 60.0:
+        cpx.pixels[8] = BLUE
+    else:
+       cpx.pixels[8] = OFF
+    if Processed_Water_Temp > -160.0:
+        cpx.pixels[9] = WHITE
+    else:
+        cpx.pixels[9] = OFF
+    return
+
+
+
 
 while True:
     
     My_Debug = DebugTrigger()
 
-    if My_Debug == True:
-        # Water_temp = (((Temp_convert(cpx.temperature,"c") * .05 ) * 4**5) - 4260)
-        Water_temp = Temp_convert(cpx.temperature,"c")
-        if cpx.touch_A1:
-            Water_temp = 40.0
-        if cpx.touch_A2:
-            Water_temp = 65.0
-        if cpx.touch_A3:
-            Water_temp = 105.0
-        if cpx.touch_A4:
-            Water_temp = 115.0
-        if cpx.touch_A5:
-            Water_temp = 125.0
-        if cpx.touch_A6:
-            Water_temp = 145.0
-        if cpx.touch_A7:
-            Water_temp = 180.0
+    Water_temp = Water_Temp_Setter()
 
-    elif My_Debug == False:
-        Water_temp = Temp_convert(cpx.temperature,"c")
-
-
-    if Water_temp > -160.0:
-        cpx.pixels[9] = WHITE
-       # Test_lights[0] = WHITE
-       # Test_lights[1:9] = OFF
+    if My_Debug: Water_Temp_Indicator(Water_temp)
     else:
-        cpx.pixels[9] = OFF
-    if Water_temp > 60.0:
-        cpx.pixels[8] = BLUE
-       # Test_lights[2] = WHITE
-       # Test_lights[2:] = OFF
-    else:
-       cpx.pixels[8] = OFF
-    if Water_temp > 80.0:
-        cpx.pixels[7] = GREEN
-    else:
-       cpx.pixels[7] = OFF
-    if Water_temp > 100.0:
-        cpx.pixels[6] = PURPLE
-    else:
-       cpx.pixels[6] = OFF
-    if Water_temp > 110.0:
-        cpx.pixels[5] = YELLOW
-    else:
-       cpx.pixels[5] = OFF
-    if Water_temp > 120.0:
-        cpx.pixels[4] = YELLOW
-    else:
-       cpx.pixels[4] = OFF
-    if Water_temp > 130.0:
-        cpx.pixels[3] = RED
-    else:
-       cpx.pixels[3] = OFF
-    if Water_temp > 140.0:
-        cpx.pixels[2] = RED
-    else:
-       cpx.pixels[2] = OFF
-    #else:
-    #    cpx.pixels.fill = ((0,0,0))
+        for i in range(len(cpx.pixels)):
+            cpx.pixels[i] = OFF
 
     if Water_temp > 120:
         cpx.red_led = True
@@ -164,7 +190,7 @@ while True:
 
     time.sleep(0.25)
     print(Water_temp)
-    print("Debugging is set to", My_Debug, "and temp readings are", not My_Debug)
+    print("Debugging is set to", My_Debug, "and temp readings may be", not My_Debug)
     cpx.pixels.fill = OFF
     
     if Water_temp > 120:
@@ -204,7 +230,7 @@ while True:
 
     #cpx.red_led = True                  # Turns the little LED next to USB on
     # if cpx.
-    #cpx.pixels[1] = 100
+
 
 
     # loop to the beginning!'''
