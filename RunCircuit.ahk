@@ -36,10 +36,13 @@ NewVer = 0
     Progress, w250,,, Hold yer ponies,  I'm downloading the newist D:\main.py…
     FileCopy, D:\main.py, D:\main.py.bak, 1
     Progress, 25
+    sleep, 100
     FileCopy, D:\main.py, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py.bak, 1  ; Come back and make C:\etc into a single variable, so I can call the same thing everywhere.
     Progress, 75
+    sleep, 100
     UrlDownloadToFile, https://raw.githubusercontent.com/truevox/Sultry_Saver/master/main.py, D:\main.py ;*[ShortcutToolkit]
     Progress, 100
+    sleep, 100
     ; MsgBox If you see me, I either just updated when you triggered me to, or I updated last night. Either way, please click 'OK', and go about your day! Also, press 'Win+F2' to open up a quick help cheat-sheet.
     Reload
     ExitApp
@@ -51,8 +54,12 @@ NewVer = 0
     Progress, w250,,, Hold yer ponies,  I'm pushing the newist D:\main.py to the repo…
     FileCopy, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py.bak, 1
     Progress, 25
+    sleep, 100
     FileCopy, D:\main.py, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py, 1
     Progress, 75
+    sleep, 100
+    Progress, 100
+    sleep, 100
     ; MsgBox If you see me, I either just updated when you triggered me to, or I updated last night. Either way, please click 'OK', and go about your day! Also, press 'Win+F2' to open up a quick help cheat-sheet.
     Reload
     ExitApp
