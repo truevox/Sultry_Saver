@@ -211,7 +211,9 @@ while True:
     My_Debug = DebugTrigger(True) # Leave DebugTrigger() blank to power it with the on-board switch.
 
     Water_temp = Water_Temp_Setter(cpx.temperature)
-
+    #if My_Debug: Water_temp = scale(Water_temp, (80.0, 90.0), (60.0, 160.0))
+    #if My_Debug: print("Fake Temp: " + str(Water_temp))
+    
     if My_Debug: Water_Temp_Indicator(Water_temp)
     else:
         for i in range(len(cpx.pixels)):
