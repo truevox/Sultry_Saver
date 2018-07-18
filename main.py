@@ -22,7 +22,7 @@ PURPLE = (180, 0, 255)
 
 # Not too bright!
 cpx.pixels.brightness = 0.1
-    
+
 def Temp_convert(temp, unit):
     unit = unit.lower()
     if unit == "c":
@@ -60,7 +60,7 @@ cpx.detect_taps = 1    # detect single tap only
 
 #led = digitalio.DigitalInOut(board.D13)
 #led.direction = digitalio.Direction.OUTPUT
- 
+
 # uart = busio.UART(board.TX, board.RX, baudrate=9600)
 
 def DebugTrigger(x=cpx.switch):
@@ -194,80 +194,45 @@ def Solenoid_Trigger(VentBool):
         print("ERROR!!!")
         return #TODO: Need to figure out raising exceptions
     return
-    
+
 TicksTween = 10
 TimeClock = 0
 
-def Time_Ticker(Ticks):
+def Time_Ticker(Ticks, pTicksTween):
     Ticks = Ticks + 1
-    if Ticks >= TicksTween:
+    if Ticks >= pTicksTween:
         Ticks = 0
-        if My_Debug: print("Tick Rollover") 
+        if My_Debug: print("Tick Rollover")
     return Ticks
-    
+
 
 while True:
-    
+
     My_Debug = DebugTrigger(True) # Leave DebugTrigger() blank to power it with the on-board switch.
 
     Water_temp = Water_Temp_Setter(cpx.temperature)
     #if My_Debug: Water_temp = scale(Water_temp, (80.0, 90.0), (60.0, 160.0))
     #if My_Debug: print("Fake Temp: " + str(Water_temp))
-    
+
     if My_Debug: Water_Temp_Indicator(Water_temp)
     else:
         for i in range(len(cpx.pixels)):
             cpx.pixels[i] = OFF
-    
+
     Fill_heat = 120
-    
+
     Solenoid_Trigger(Solenoid_Eval(Water_temp, Fill_heat))
 
     time.sleep(0.3)
     print(Water_temp)
-    TimeClock = Time_Ticker(TimeClock)
+    TimeClock = Time_Ticker(TimeClock, TicksTween)
     if TimeClock % TicksTween == 0:
         print("Debugging is set to " + str(My_Debug) + " and temp readings may be " + str(not My_Debug))
         print(str(Solenoid_Trigger(Solenoid_Eval(Water_temp, Fill_heat))))
     if TimeClock % TicksTween == 5: print(str(Solenoid_Trigger(Solenoid_Eval(Water_temp, Fill_heat))))
-    #print(Time_Ticker(TimeClock))
+    #print(Time_Ticker(TimeClock, TicksTween))
     #print(TimeClock % TicksTween)
 
 
 
-
-    '''
-    data = uart.read(32)  # read up to 32 bytes
-    # print(data)  # this is a bytearray type
- 
-    if data is not None:
-        cpx.red_led = True
- 
-        # convert bytearray to string
-        data_string = ''.join([chr(b) for b in data])
-        print(data_string, end="")
- 
-        cpx.red_led = False
-
-
-
- #   data = sys.stdin.read(1)
-    if data == 1:
-        cpx.red_led = True
-
-    elif data != 0:
-        cpx.red_led = False
-
-
-
-
-
-    #cpx.red_led = True                  # Turns the little LED next to USB on
-    # if cpx.
-
-
-
-    # loop to the beginning!'''
-#=======
-#print("Hello World!"
-#>>>>>>> master
+    # loop to the beginning!

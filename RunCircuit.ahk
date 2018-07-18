@@ -1,4 +1,4 @@
-/*;========================================================
+ï»¿/*;========================================================
 ;==  INI Values (DO NOT ADJUST THE LINE SPACING!!!)
 ;==========================================================
 [INI_Section]
@@ -28,12 +28,75 @@ NewVer = 0
 ; Shift     +
 ; Win Logo  #
 
+;main.py â€” C:\Users\truevox\Documents\Code\Sultry_Saver â€” Atom
+;main.py â€” C:\Users\truevox\Documents\Code\Sultry_Saver â€” Atom..
+;          C:\Users\truevox\Documents\Code\Sultry_Saver
+
+;If it matches the /dir/me/code/ #IfWinActive WinTitle, WinText code (Set title match mode 2, don't forget) then ~Ctrl S will run. This then loops through an if then statement that uses WinActive() to test fo win in the array.
 
 
 
-^+p:: ;c Push an update directly from master to the CPE on D:\ - currently ONLY pulls main.py.
+LegalFile := ["main.py", "bearlibs.py"]
+
+for FileNameIndex in LegalFile
 {
-    Progress, w250,,, Hold yer ponies,  I'm downloading the newist D:\main.py…
+    LegalFilePath := LegalFile[FileNameIndex] . " â€” " . A_ScriptDir
+    GroupAdd, LegalScripts, LegalFilePath   ; FileNameIndex . A_ScriptDir
+}
+
+
++!r::
+{
+    msgbox, , , Reloading, 0.33
+    Reload
+    ExitApp
+    return
+}
+
+SetTitleMatchMode, 2
+;TODO Need to add code to get the " â€” Atom"  involved
+#IfWinActive LegalScripts
+~^s::
+{
+    ;SetTitleMatchMode, 1
+    for LegalFileName in LegalFile
+    {
+        if WinActive(LegalFile[LegalFileName])
+            msgbox, LegalFile[LegalFileName]
+    }
+    ;if WinActive("main.py")
+    msgbox,
+    Reload
+    ExitApp
+    return
+}
+
+
+
+
+/*
+~^s:: ;c Push an update directly from master to the CPE on D:\ - currently ONLY pulls main.py.
+{
+    Progress, w250,,, Hold yer ponies,  I'm pushing the newist D:\main.py to the repoï¿½
+    FileCopy, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py.bak, 1
+    Progress, 25
+    sleep, 100
+    FileCopy, D:\main.py, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py, 1
+    Progress, 75
+    sleep, 100
+    Progress, 100
+    sleep, 100
+    ; MsgBox If you see me, I either just updated when you triggered me to, or I updated last night. Either way, please click 'OK', and go about your day! Also, press 'Win+F2' to open up a quick help cheat-sheet.
+    Reload
+    ExitApp
+}
+
+
+
+
+/*
+{
+    Progress, w250,,, Hold yer ponies,  I'm downloading the newist D:\main.pyï¿½
     FileCopy, D:\main.py, D:\main.py.bak, 1
     Progress, 25
     sleep, 100
@@ -51,7 +114,7 @@ NewVer = 0
 
 ^+b:: ;c Push an update directly from the CPE on D:\ to the repo- currently ONLY pulls main.py.
 {
-    Progress, w250,,, Hold yer ponies,  I'm pushing the newist D:\main.py to the repo…
+    Progress, w250,,, Hold yer ponies,  I'm pushing the newist D:\main.py to the repoï¿½
     FileCopy, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py.bak, 1
     Progress, 25
     sleep, 100
@@ -83,7 +146,7 @@ SetTimer UpdateCheck, 60000 ; Check each minute
 ButtonRestartToolkit:
 ^+#r:: ;c ?? Restart Marvin's ShortCutToolkit ?? Ctrl+Shift+Win+r | Pressing Ctrl+Shift+Win+r will restart the ShortCutToolkit - use this if it freezes up on you.
 {
-	Progress, w250,,, Hold yer ponies,  I'm restarting…
+	Progress, w250,,, Hold yer ponies,  I'm restartingï¿½
 	vRestart := 0
 	loop, 100
 	{
@@ -101,7 +164,7 @@ ButtonRestartToolkit:
 UpdateCheck:
 If (A_Hour = 01 And A_Min = 12)
 {
-	Progress, w250,,, Hold yer ponies,  I'm updating…
+	Progress, w250,,, Hold yer ponies,  I'm updatingï¿½
 	Sleep, 2000
 	Progress, off
 	gosub VersionCheck
@@ -116,7 +179,7 @@ UpdateCheckTest:
 If (A_Hour = 13)
 	{
 	Msgbox, Hey!
-	Progress, w250,,, Hold yer ponies,  I'm updating…
+	Progress, w250,,, Hold yer ponies,  I'm updatingï¿½
 	Sleep, 10000
 	Progress, off
 	gosub VersionCheck
@@ -150,7 +213,7 @@ UpdateScript:
 ^+#u:: ;c ?? Update Script ?? Ctrl+Shift+Win+u | Typing Ctrl+Shift+Win+u will trigger an update of the script - also automatically triggered every morning at 1:15am
 {
 	UrlDownloadToFile, https://raw.githubusercontent.com/MarvinFiveMaples/ShortcutToolkit/master/ShortcutToolkit.ahk?raw=true, ShortcutToolkit.ahk ;*[ShortcutToolkit]
-	;Progress, w250,,, Hold yer ponies,  I'm updating…
+	;Progress, w250,,, Hold yer ponies,  I'm updatingï¿½
 	MsgBox If you see me, I either just updated when you triggered me to, or I updated last night. Either way, please click 'OK', and go about your day! Also, press 'Win+F2' to open up a quick help cheat-sheet.
 	Reload
 	ExitApp
@@ -176,7 +239,7 @@ loop parse, content,`n
   position +=1
   stringtrimleft com,a_loopfield,%position%
   comment =%comment%%com%`n`n
- } 
+ }
 }
   gui, submit
   msgbox %comment%
