@@ -223,7 +223,7 @@ while True:
 
     Solenoid_Trigger(Solenoid_Eval(Water_temp, Fill_heat))
 
-    time.sleep(0.3)
+    time.sleep(10.3)
     print(Water_temp)
     TimeClock = Time_Ticker(TimeClock, TicksTween)
     if TimeClock % TicksTween == 0:
