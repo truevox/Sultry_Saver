@@ -34,49 +34,57 @@ double runCeiling();
 double runWall();
 double runFloor();
 void runReciept();
+int menuChooser();
+int menuRunner();
+
 
 int main() {
 
-	int menuChoice;
+
 
 	cout << "Welcome to our self-estimate calculator" << endl << endl;
-	cout << "\nTo enter ceiling footage, enter    1" << endl;
-	cout << "To enter wall footage, enter       2" << endl;
-	cout << "To enter flooring footage, enter   3" << endl;
-	cout << "To see your estimate, enter        4\n\n" << endl;
-
-	cin >> menuChoice;
-
-
-	if (menuChoice == 1) {
-		runCeiling();
-	}//end if
-
-
-	else if (menuChoice == 2) {
-		runWall();
-	}//end else if 2
-
-
-	else if (menuChoice == 3) {
-		runFloor();
-	}//end else if 3
-
-
-	else if (menuChoice == 4) {
-		runReciept();
-	}//end else if 4
-
-
-	else {
-		cout << "\nYou have made an invalid selection. Please restart program.\n";
-	}//end else
+    menuChooser()
 
 
 	return 0;
 }
 
-//I like to move it and groove it. - Adam quoting some other guy.
+
+
+
+int menuChooser() {
+    cout << "\nTo enter ceiling footage, enter    1" << endl;
+    cout << "To enter wall footage, enter       2" << endl;
+    cout << "To enter flooring footage, enter   3" << endl;
+    cout << "To see your estimate, enter        4\n\n" << endl;
+
+    cin >> menuChoice;
+
+
+    if (menuChoice == 1) {
+        runCeiling();
+    }//end if
+
+
+    else if (menuChoice == 2) {
+        runWall();
+    }//end else if 2
+
+
+    else if (menuChoice == 3) {
+        runFloor();
+    }//end else if 3
+
+
+    else if (menuChoice == 4) {
+        runReciept();
+    }//end else if 4
+
+
+    else {
+        cout << "\nYou have made an invalid selection. Please restart program.\n";
+    }//end else
+}
 
 
 double runCeiling() {
@@ -85,6 +93,7 @@ double runCeiling() {
 	cout << "How many square feet of painted ceiling would you like to add?" << endl;
 	cin >> ceilingFoot;
 	cout << ceilingFoot << " Temp output\n";
+    menuChooser()
 	return 0;
 }
 
@@ -96,6 +105,7 @@ double runWall() {
 	cout << "How many square feet of painted walls would you like to add?" << endl;
 	cin >> wallFoot;
 	cout << wallFoot << " Temp output\n";
+    menuChooser()
 	return 0;
 }
 
@@ -130,7 +140,7 @@ double runFloor() {
 	else {
 		cout << "That is an invalid selection. Please restart program.\n"; //Ideally I would like to make the program go back to the floor menu without total retart, but I am already so late.
 	}
-
+    menuChooser()
 	return 0;
 }
 
@@ -208,4 +218,5 @@ void runReciept() {
 	grandTot = ceilingTot + wallTot + floorTot;
 
 	cout << "\n\nAnd the grand total of all of the above work is...   $" << grandTot << "\n" << endl;
+    menuChooser()
 }
