@@ -43,7 +43,7 @@ int main() {
 
 
 	cout << "Welcome to our self-estimate calculator" << endl << endl;
-    menuChooser()
+    menuChooser();
 
 
 	return 0;
@@ -93,7 +93,7 @@ double runCeiling() {
 	cout << "How many square feet of painted ceiling would you like to add?" << endl;
 	cin >> ceilingFoot;
 	cout << ceilingFoot << " Temp output\n";
-    menuChooser()
+    menuChooser();
 	return 0;
 }
 
@@ -105,7 +105,7 @@ double runWall() {
 	cout << "How many square feet of painted walls would you like to add?" << endl;
 	cin >> wallFoot;
 	cout << wallFoot << " Temp output\n";
-    menuChooser()
+    menuChooser();
 	return 0;
 }
 
@@ -140,7 +140,7 @@ double runFloor() {
 	else {
 		cout << "That is an invalid selection. Please restart program.\n"; //Ideally I would like to make the program go back to the floor menu without total retart, but I am already so late.
 	}
-    menuChooser()
+    menuChooser();
 	return 0;
 }
 
@@ -218,5 +218,5 @@ void runReciept() {
 	grandTot = ceilingTot + wallTot + floorTot;
 
 	cout << "\n\nAnd the grand total of all of the above work is...   $" << grandTot << "\n" << endl;
-    menuChooser()
+    menuChooser();
 }
