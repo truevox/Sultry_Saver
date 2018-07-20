@@ -9,6 +9,7 @@ from adafruit_circuitplayground.express import touchio
 
 # dir(cpx.pixels) # contains useful info
 
+# I am a modern monkey mans.
 
 # NeoPixel color names
 WHITE = (50, 50, 50)
@@ -192,11 +193,12 @@ def Solenoid_Trigger(VentBool):
         cpx.red_led = False
     else:
         print("ERROR!!!")
-        return #TODO: Need to figure out raising exceptions
+        return  # TODO: Need to figure out raising exceptions
     return
 
 TicksTween = 10
 TimeClock = 0
+RepeatTicker = 0
 
 def Time_Ticker(Ticks, pTicksTween):
     Ticks = Ticks + 1
@@ -208,7 +210,7 @@ def Time_Ticker(Ticks, pTicksTween):
 
 while True:
 
-    My_Debug = DebugTrigger(True) # Leave DebugTrigger() blank to power it with the on-board switch.
+    My_Debug = DebugTrigger() # Leave DebugTrigger() blank to power it with the on-board switch.
 
     Water_temp = Water_Temp_Setter(cpx.temperature)
     #if My_Debug: Water_temp = scale(Water_temp, (80.0, 90.0), (60.0, 160.0))
@@ -223,8 +225,12 @@ while True:
 
     Solenoid_Trigger(Solenoid_Eval(Water_temp, Fill_heat))
 
-    time.sleep(0.3)
-    print(Water_temp)
+    if My_Debug == True:
+        time.sleep(0.3)
+    else:
+        time.sleep(10)
+    print(str(Water_temp) + "  " + str(RepeatTicker))
+    RepeatTicker = RepeatTicker + 1
     TimeClock = Time_Ticker(TimeClock, TicksTween)
     if TimeClock % TicksTween == 0:
         print("Debugging is set to " + str(My_Debug) + " and temp readings may be " + str(not My_Debug))
