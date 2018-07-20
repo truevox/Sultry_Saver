@@ -1,0 +1,34 @@
+### General TODO
+
+- [x] Create TODO document. :D
+
+- [x] Begin integrating testing into what code I can. Refactor where needed.
+
+- [ ] Refactor microprocessor code into two files, one that's testable without a microprocessor using pytest or doctests, and one that executes on the MP that ONLY contains non-testable, portable code.
+
+- [ ] Establish a beta branch to go along with dev & main. Beta will allow downloading separate scripts via AHK (this will likely be #ApplicableAtWork).
+
+- [ ] Consider a separate, pulled-on-demand script to do spell checking, ala https://www.autohotkey.com/download/AutoCorrect.ahk. Have it pull directly from there on new download, but, assuming it fails (will have to build a failure checker - yay TDD) I should also have a version in the repo.
+
+- [ ] Integrate personal #TODO via hotkey (and out of this file, but it should be able to WRITE TO and DISPLAY this file (SUPER #ApplicableAtWork)). See below TODO TODO section for more about this.
+
+- [ ] Re-create option to pull known-working code from Master down to D:\ (shouldn't be hard)
+
+
+
+### TODO TODO
+
+- [ ] Can write to this very TODO file (or any other place). User should get the option to select where to write on first use.
+- [ ] On first run
+
+- [ ] Simple hotkey should call up an easy way to add to the TODO (this will ALSO have a "Show TODO" button and a "Config" button).
+
+- [ ] Show TODO button should launch a short screen, parsing through the TODO file. Use the "Auto Help Gen" as a prototype parser.
+
+- [ ] There should be check boxes and they should "work" (which is to say they should write to the file).
+
+
+
+### Five Maples ButtonForceUpdateToolkit
+
+- [ ] Switch from TabMemFree to THE GREAT SUSPENDER
