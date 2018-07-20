@@ -1,13 +1,70 @@
-/*;========================================================
-;==  INI Values (DO NOT ADJUST THE LINE SPACING!!!)
+ï»¿/*;========================================================
+;### INI Values (DO NOT ADJUST THE LINE SPACING!!!)
 ;==========================================================
 [INI_Section]
 version=1
-*/
+
 ;==========================================================
-;==  Boilerplate
+;### GENERAL NOTES
 ;==========================================================
 
+; Key	Syntax
+; Alt       !
+; Ctrl      ^
+; Shift     +
+; Win Logo  #
+;==========================================================
+;### USEFUL REFERENCE CODE
+;==========================================================
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+; Just general syntax hints:
+
+MsgBox % "The answer is: " . Add(3, 2)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+; This converts 1 and 2 dimension arrays to strings
+
+F2:: MsgBox % join(["Alice", "Mary", "Bob"])
+join( strArray )
+{
+  s := ""
+  for i,v in strArray
+    s .= ", " . v
+  return substr(s, 3)
+}
+
+F3:: MsgBox % join2D([[1,2,3], [4,5,6]])
+join2D( strArray2D )
+{
+  s := ""
+  for i,array in strArray2D
+    s .= ", [" . join(array) . "]"
+  return substr(s, 3)
+}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+; How to enumerate through an array:
+
+for index, LegalFileName in LegalFile ; Enumeration is the recommended approach in most cases.
+{
+    ; Using "Loop", indices must be consecutive numbers from 1 to the number
+    ; of elements in the array (or they must be calculated within the loop).
+    ; MsgBox % "Element number " . A_Index . " is " . Array[A_Index]
+
+    ; Using "for", both the index (or "key") and its associated value
+    ; are provided, and the index can be *any* value of your choosing.
+    MsgBox % "Legal File Name number " . index . " is " . LegalFileName
+}
+
+*/
+
+;==========================================================
+;### Boilerplate
+;==========================================================
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases, prevents checking empty variables
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
@@ -18,22 +75,190 @@ CurrentVer = 0
 NewVer = 0
 ;SetBatchLines, -1	; Runs the script at max speed, default is 10 or 20 ms
 
-;==========================================================
-;==  GENERAL NOTES
-;==========================================================
-
-; Key	Syntax
-; Alt       !
-; Ctrl      ^
-; Shift     +
-; Win Logo  #
+LegalFile := ["main.py", "bearlibs.py"]
+RunningTotal := ""
 
 
+;main.py â€” C:\Users\truevox\Documents\Code\Sultry_Saver â€” Atom
+;main.py â€” C:\Users\truevox\Documents\Code\Sultry_Saver â€” Atom..
+;          C:\Users\truevox\Documents\Code\Sultry_Saver
+
+;If it matches the /dir/me/code/ #IfWinActive WinTitle, WinText code (Set title match mode 2, don't forget) then ~Ctrl S will run. This then loops through an if then statement that uses WinActive() to test fo win in the array.
 
 
-^+p:: ;c Push an update directly from master to the CPE on D:\ - currently ONLY pulls main.py.
+
+
+
+for i, LegalFileName in LegalFile
 {
-    Progress, w250,,, Hold yer ponies,  I'm downloading the newist D:\main.py…
+    GroupAdd, LegalScripts, LegalFileName
+    /*  ; This may be interesting later, so I'm saving it for posterity.
+    ;TODO Get comfortable with source control so I don't have to save things in script for posterity.
+    LegalFilePath := LegalFile[FileNameIndex] . " â€” " . A_ScriptDir
+    GroupAdd, LegalScripts, LegalFilePath   ; FileNameIndex . A_ScriptDir
+    */
+}
+
+
++!r::
+{
+    msgbox, , , Reloading, 0.33
+    Reload
+    ExitApp
+    return
+}
+
+
+CopyToCPX(SourceFileName, DestinationFileName:=0, DestinationFolder:="D:\") ;TODO Need to give a variable way to rename files during copy (so copy C:\A.txt to D:\B.Bat)
+{
+    if (DestinationFileName = 0)
+    {
+        DestinationFileName := SourceFileName
+    }
+    ;Progress, w250,,, Hold yer ponies,  I'm pushing the newist D:\main.py to the repo     ;TODO Come back and get this later - I'll need it elsewhere.
+    ;Progress, 25     ;TODO Come back and get this later - I'll need it elsewhere.
+    ;Progress, 75     ;TODO Come back and get this later - I'll need it elsewhere.
+    ;Progress, 100    ;TODO Come back and get this later - I'll need it elsewhere.
+    DestinationFull := DestinationFolder . DestinationFileName
+    BackupFull := DestinationFileName . ".bak"
+    Progress, w250,,, Please hold - Copying %SourceFileName%â€¦
+    Progress,
+    FileCopy, %DestinationFull%, %BackupFull%, 1
+    Progress, 35
+    FileCopy, %SourceFileName%, %DestinationFull%, 1
+    Progress, 65
+    Progress, 100
+    Progress, Off
+    return "Copied " . SourceFileName . " to " . DestinationFull
+    ; return [A_ScriptDir . "\" . SourceFileName, DestinationFolder . "\" . DestinationFileName] ;TODO Come back and make Array - for now, just return a string of the file name.
+}
+
+Join(strArray)
+{
+  s := ""
+  for i,v in strArray
+    s .= ", " . v
+  return substr(s, 3)
+}
+
+
+
+
+
+DetectHiddenWindows, On
+SetTitleMatchMode, 1
+;TODO Need to add code to get the " â€” Atom"  involved
+
+#IfWinActive main.py â€”
+
+    ;TODO Change the below text into a function, and then just call that instead.
+
+~^s:: ;c Push an update directly from my local repo to the CPE on D:\ - pulls from LegalFile array.
+{
+    for i, LegalFileName in LegalFile
+    {
+        ;msgbox % "Looping the copy stuff - now on: " . LegalFileName
+        RunningTotal := RunningTotal . ", `n" . CopyToCPX(LegalFileName)
+        for i, CopySuccessFile in CopySuccess
+        {
+            RunningTotal.Push(CopySuccessFile)
+        }
+    }
+    msgbox, , , % substr(RunningTotal, 3), 0.5
+    return
+}
+
+#IfWinActive bearlibs.py â€”
+
+~^s:: ;c Push an update directly from my local repo to the CPE on D:\ - pulls from LegalFile array.
+{
+    for i, LegalFileName in LegalFile
+    {
+        ;msgbox % "Looping the copy stuff - now on: " . LegalFileName
+        RunningTotal := RunningTotal . ", `n" . CopyToCPX(LegalFileName)
+        for i, CopySuccessFile in CopySuccess
+        {
+            RunningTotal.Push(CopySuccessFile)
+        }
+    }
+    msgbox, , , % substr(RunningTotal, 3), 0.5
+    return
+}
+
+
+
+
+
+SetTitleMatchMode, 2
+
+; #IfWinActive Atom   ; Need to come back and fix this, but for nowâ€¦
+#IfWinActive, ahk_exe atom.exe
+
+:Z*:===::- [ ] ` ;c Swaps --- (or ===) for - [ ]  when ever it's typed into Atom.
+:Z*:---::- [ ] `
+:Z*:msgb::msgbox `%{Space}{Del}
+
+
+/*
+
+
+~^s:: ;TODO Need to come back to this and make it only work on files that are open. For the moment, we'll just make sure Atom is open.
+{
+    for i, LegalFileName in LegalFile
+    {
+        if WinExist(LegalFileName)
+            msgbox % "Looping the copy stuff - now on: " . LegalFileName
+            CopySuccess := [CopyToCPX(LegalFileName)]
+            for i, CopySuccessFile in CopySuccess
+            {
+                RunningTotal.Push(CopySuccessFile)
+            }
+    }
+    MsgBox % Join(RunningTotal) . "Test"
+    Reload   ; Erase later
+    ExitApp  ; Erase later
+    return
+}
+
+{
+    ;SetTitleMatchMode, 1
+    for LegalFileName in LegalFile
+
+    ;if WinActive("main.py")
+    for i in LegalFile
+    {
+        MiniMsg := A_ScriptDir . "\" . LegalFile[i]
+        msgbox %MiniMsg%
+    }
+    Reload
+    ExitApp
+    return
+}
+
+
+/*
+~^s:: ;c Push an update directly from master to the CPE on D:\ - currently ONLY pulls main.py.
+{
+    Progress, w250,,, Hold yer ponies,  I'm pushing the newist D:\main.py to the repoï¿½
+    FileCopy, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py.bak, 1
+    Progress, 25
+    sleep, 100
+    FileCopy, D:\main.py, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py, 1
+    Progress, 75
+    sleep, 100
+    Progress, 100
+    sleep, 100
+    ; MsgBox If you see me, I either just updated when you triggered me to, or I updated last night. Either way, please click 'OK', and go about your day! Also, press 'Win+F2' to open up a quick help cheat-sheet.
+    Reload
+    ExitApp
+}
+
+
+
+
+/*
+{
+    Progress, w250,,, Hold yer ponies,  I'm downloading the newist D:\main.pyï¿½
     FileCopy, D:\main.py, D:\main.py.bak, 1
     Progress, 25
     sleep, 100
@@ -51,7 +276,7 @@ NewVer = 0
 
 ^+b:: ;c Push an update directly from the CPE on D:\ to the repo- currently ONLY pulls main.py.
 {
-    Progress, w250,,, Hold yer ponies,  I'm pushing the newist D:\main.py to the repo…
+    Progress, w250,,, Hold yer ponies,  I'm pushing the newist D:\main.py to the repoï¿½
     FileCopy, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py, C:\Users\truevox\Documents\Code\Sultry_Saver\main.py.bak, 1
     Progress, 25
     sleep, 100
@@ -73,7 +298,7 @@ NewVer = 0
 /*
 
 ;===========================================================
-;==  Update Module
+;### Update Module
 ;===========================================================
 ; Files if hosted on Github    : https://raw.githubusercontent.com/MarvinFiveMaples/ShortcutToolkit/master/ShortcutToolkit.ahk?raw=true
 
@@ -83,7 +308,7 @@ SetTimer UpdateCheck, 60000 ; Check each minute
 ButtonRestartToolkit:
 ^+#r:: ;c ?? Restart Marvin's ShortCutToolkit ?? Ctrl+Shift+Win+r | Pressing Ctrl+Shift+Win+r will restart the ShortCutToolkit - use this if it freezes up on you.
 {
-	Progress, w250,,, Hold yer ponies,  I'm restarting…
+	Progress, w250,,, Hold yer ponies,  I'm restartingï¿½
 	vRestart := 0
 	loop, 100
 	{
@@ -101,7 +326,7 @@ ButtonRestartToolkit:
 UpdateCheck:
 If (A_Hour = 01 And A_Min = 12)
 {
-	Progress, w250,,, Hold yer ponies,  I'm updating…
+	Progress, w250,,, Hold yer ponies,  I'm updatingï¿½
 	Sleep, 2000
 	Progress, off
 	gosub VersionCheck
@@ -116,7 +341,7 @@ UpdateCheckTest:
 If (A_Hour = 13)
 	{
 	Msgbox, Hey!
-	Progress, w250,,, Hold yer ponies,  I'm updating…
+	Progress, w250,,, Hold yer ponies,  I'm updatingï¿½
 	Sleep, 10000
 	Progress, off
 	gosub VersionCheck
@@ -150,7 +375,7 @@ UpdateScript:
 ^+#u:: ;c ?? Update Script ?? Ctrl+Shift+Win+u | Typing Ctrl+Shift+Win+u will trigger an update of the script - also automatically triggered every morning at 1:15am
 {
 	UrlDownloadToFile, https://raw.githubusercontent.com/MarvinFiveMaples/ShortcutToolkit/master/ShortcutToolkit.ahk?raw=true, ShortcutToolkit.ahk ;*[ShortcutToolkit]
-	;Progress, w250,,, Hold yer ponies,  I'm updating…
+	;Progress, w250,,, Hold yer ponies,  I'm updatingï¿½
 	MsgBox If you see me, I either just updated when you triggered me to, or I updated last night. Either way, please click 'OK', and go about your day! Also, press 'Win+F2' to open up a quick help cheat-sheet.
 	Reload
 	ExitApp
@@ -159,7 +384,7 @@ UpdateScript:
 
 
 ;==========================================================
-;==  Help File Section
+;### Help File Section
 ;==========================================================
 
 ButtonHelp:
@@ -176,7 +401,7 @@ loop parse, content,`n
   position +=1
   stringtrimleft com,a_loopfield,%position%
   comment =%comment%%com%`n`n
- } 
+ }
 }
   gui, submit
   msgbox %comment%
