@@ -1,13 +1,70 @@
 ﻿/*;========================================================
-;==  INI Values (DO NOT ADJUST THE LINE SPACING!!!)
+;### INI Values (DO NOT ADJUST THE LINE SPACING!!!)
 ;==========================================================
 [INI_Section]
 version=1
-*/
+
 ;==========================================================
-;==  Boilerplate
+;### GENERAL NOTES
 ;==========================================================
 
+; Key	Syntax
+; Alt       !
+; Ctrl      ^
+; Shift     +
+; Win Logo  #
+;==========================================================
+;### USEFUL REFERENCE CODE
+;==========================================================
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+; Just general syntax hints:
+
+MsgBox % "The answer is: " . Add(3, 2)
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+; This converts 1 and 2 dimension arrays to strings
+
+F2:: MsgBox % join(["Alice", "Mary", "Bob"])
+join( strArray )
+{
+  s := ""
+  for i,v in strArray
+    s .= ", " . v
+  return substr(s, 3)
+}
+
+F3:: MsgBox % join2D([[1,2,3], [4,5,6]])
+join2D( strArray2D )
+{
+  s := ""
+  for i,array in strArray2D
+    s .= ", [" . join(array) . "]"
+  return substr(s, 3)
+}
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+; How to enumerate through an array:
+
+for index, LegalFileName in LegalFile ; Enumeration is the recommended approach in most cases.
+{
+    ; Using "Loop", indices must be consecutive numbers from 1 to the number
+    ; of elements in the array (or they must be calculated within the loop).
+    ; MsgBox % "Element number " . A_Index . " is " . Array[A_Index]
+
+    ; Using "for", both the index (or "key") and its associated value
+    ; are provided, and the index can be *any* value of your choosing.
+    MsgBox % "Legal File Name number " . index . " is " . LegalFileName
+}
+
+*/
+
+;==========================================================
+;### Boilerplate
+;==========================================================
 #NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases, prevents checking empty variables
 ; #Warn  ; Enable warnings to assist with detecting common errors.
 SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
@@ -18,15 +75,9 @@ CurrentVer = 0
 NewVer = 0
 ;SetBatchLines, -1	; Runs the script at max speed, default is 10 or 20 ms
 
-;==========================================================
-;==  GENERAL NOTES
-;==========================================================
+LegalFile := ["main.py", "bearlibs.py"]
+RunningTotal := ""
 
-; Key	Syntax
-; Alt       !
-; Ctrl      ^
-; Shift     +
-; Win Logo  #
 
 ;main.py — C:\Users\truevox\Documents\Code\Sultry_Saver — Atom
 ;main.py — C:\Users\truevox\Documents\Code\Sultry_Saver — Atom..
@@ -36,12 +87,16 @@ NewVer = 0
 
 
 
-LegalFile := ["main.py", "bearlibs.py"]
 
-for FileNameIndex in LegalFile
+
+for i, LegalFileName in LegalFile
 {
+    GroupAdd, LegalScripts, LegalFileName
+    /*  ; This may be interesting later, so I'm saving it for posterity.
+    ;TODO Get comfortable with source control so I don't have to save things in script for posterity.
     LegalFilePath := LegalFile[FileNameIndex] . " — " . A_ScriptDir
     GroupAdd, LegalScripts, LegalFilePath   ; FileNameIndex . A_ScriptDir
+    */
 }
 
 
@@ -53,25 +108,132 @@ for FileNameIndex in LegalFile
     return
 }
 
-SetTitleMatchMode, 2
-;TODO Need to add code to get the " — Atom"  involved
-#IfWinActive LegalScripts
-~^s::
+
+CopyToCPX(SourceFileName, DestinationFileName:=0, DestinationFolder:="D:\") ;TODO Need to give a variable way to rename files during copy (so copy C:\A.txt to D:\B.Bat)
 {
-    ;SetTitleMatchMode, 1
-    for LegalFileName in LegalFile
+    if (DestinationFileName = 0)
     {
-        if WinActive(LegalFile[LegalFileName])
-            msgbox, LegalFile[LegalFileName]
+        DestinationFileName := SourceFileName
     }
-    ;if WinActive("main.py")
-    msgbox,
-    Reload
-    ExitApp
+    ;Progress, w250,,, Hold yer ponies,  I'm pushing the newist D:\main.py to the repo     ;TODO Come back and get this later - I'll need it elsewhere.
+    ;Progress, 25     ;TODO Come back and get this later - I'll need it elsewhere.
+    ;Progress, 75     ;TODO Come back and get this later - I'll need it elsewhere.
+    ;Progress, 100    ;TODO Come back and get this later - I'll need it elsewhere.
+    DestinationFull := DestinationFolder . DestinationFileName
+    BackupFull := DestinationFileName . ".bak"
+    Progress, w250,,, Please hold - Copying %SourceFileName%…
+    Progress,
+    FileCopy, %DestinationFull%, %BackupFull%, 1
+    Progress, 35
+    FileCopy, %SourceFileName%, %DestinationFull%, 1
+    Progress, 65
+    Progress, 100
+    Progress, Off
+    return "Copied " . SourceFileName . " to " . DestinationFull
+    ; return [A_ScriptDir . "\" . SourceFileName, DestinationFolder . "\" . DestinationFileName] ;TODO Come back and make Array - for now, just return a string of the file name.
+}
+
+Join(strArray)
+{
+  s := ""
+  for i,v in strArray
+    s .= ", " . v
+  return substr(s, 3)
+}
+
+
+
+
+
+DetectHiddenWindows, On
+SetTitleMatchMode, 1
+;TODO Need to add code to get the " — Atom"  involved
+
+#IfWinActive main.py —
+
+    ;TODO Change the below text into a function, and then just call that instead.
+
+~^s:: ;c Push an update directly from my local repo to the CPE on D:\ - pulls from LegalFile array.
+{
+    for i, LegalFileName in LegalFile
+    {
+        ;msgbox % "Looping the copy stuff - now on: " . LegalFileName
+        RunningTotal := RunningTotal . ", `n" . CopyToCPX(LegalFileName)
+        for i, CopySuccessFile in CopySuccess
+        {
+            RunningTotal.Push(CopySuccessFile)
+        }
+    }
+    msgbox, , , % substr(RunningTotal, 3), 0.5
+    return
+}
+
+#IfWinActive bearlibs.py —
+
+~^s:: ;c Push an update directly from my local repo to the CPE on D:\ - pulls from LegalFile array.
+{
+    for i, LegalFileName in LegalFile
+    {
+        ;msgbox % "Looping the copy stuff - now on: " . LegalFileName
+        RunningTotal := RunningTotal . ", `n" . CopyToCPX(LegalFileName)
+        for i, CopySuccessFile in CopySuccess
+        {
+            RunningTotal.Push(CopySuccessFile)
+        }
+    }
+    msgbox, , , % substr(RunningTotal, 3), 0.5
     return
 }
 
 
+
+
+
+SetTitleMatchMode, 2
+
+; #IfWinActive Atom   ; Need to come back and fix this, but for now…
+#IfWinActive, ahk_exe atom.exe
+
+:Z*:===::- [ ] ` ;c Swaps --- (or ===) for - [ ]  when ever it's typed into Atom.
+:Z*:---::- [ ] `
+:Z*:msgb::msgbox `%{Space}{Del}
+
+
+/*
+
+
+~^s:: ;TODO Need to come back to this and make it only work on files that are open. For the moment, we'll just make sure Atom is open.
+{
+    for i, LegalFileName in LegalFile
+    {
+        if WinExist(LegalFileName)
+            msgbox % "Looping the copy stuff - now on: " . LegalFileName
+            CopySuccess := [CopyToCPX(LegalFileName)]
+            for i, CopySuccessFile in CopySuccess
+            {
+                RunningTotal.Push(CopySuccessFile)
+            }
+    }
+    MsgBox % Join(RunningTotal) . "Test"
+    Reload   ; Erase later
+    ExitApp  ; Erase later
+    return
+}
+
+{
+    ;SetTitleMatchMode, 1
+    for LegalFileName in LegalFile
+
+    ;if WinActive("main.py")
+    for i in LegalFile
+    {
+        MiniMsg := A_ScriptDir . "\" . LegalFile[i]
+        msgbox %MiniMsg%
+    }
+    Reload
+    ExitApp
+    return
+}
 
 
 /*
@@ -136,7 +298,7 @@ SetTitleMatchMode, 2
 /*
 
 ;===========================================================
-;==  Update Module
+;### Update Module
 ;===========================================================
 ; Files if hosted on Github    : https://raw.githubusercontent.com/MarvinFiveMaples/ShortcutToolkit/master/ShortcutToolkit.ahk?raw=true
 
@@ -222,7 +384,7 @@ UpdateScript:
 
 
 ;==========================================================
-;==  Help File Section
+;### Help File Section
 ;==========================================================
 
 ButtonHelp:
