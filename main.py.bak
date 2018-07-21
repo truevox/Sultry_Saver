@@ -24,6 +24,19 @@ PURPLE = (180, 0, 255)
 # Not too bright!
 cpx.pixels.brightness = 0.1
 
+def wheel(pos):
+    # Input a value 0 to 255 to get a color value.
+    # The colours are a transition r - g - b - back to r.
+    if pos < 0 or pos > 255:
+        return 0, 0, 0
+    if pos < 85:
+        return int(255 - pos * 3), int(pos * 3), 0
+    if pos < 170:
+        pos -= 85
+        return 0, int(255 - pos * 3), int(pos * 3)
+    pos -= 170
+    return int(pos * 3), 0, int(255 - (pos * 3))
+
 def Temp_convert(temp, unit):
     unit = unit.lower()
     if unit == "c":
@@ -206,7 +219,7 @@ while True:
         time.sleep(0.2)
         Debug_Loopper -= 1
         if Debug_Loopper <= 0:
-            print("Water Temp: " + Water_temp + ", High Temp: " + High_Water_Temp)
+            print("Water Temp: " + str(Water_temp) + ", High Temp: " + str(High_Water_Temp))
             Debug_Loopper = Debug_Looper_Reps
     else:
         time.sleep(0.1)
@@ -255,7 +268,13 @@ while True:
         if My_Debug: Water_Temp_Indicator(Water_temp)
         else:
             for i in range(len(cpx.pixels)):
-                cpx.pixels[i] = OFF
+                if i == 2:
+                    cpx.pixels[i] = wheel(int(Water_temp))
+                elif i == 7:
+                    cpx.pixels[i] = wheel(int(High_Water_Temp))
+                else
+                    cpx.pixels[i] = OFF
+
 
 
 
