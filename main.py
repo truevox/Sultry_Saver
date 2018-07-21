@@ -206,7 +206,7 @@ while True:
         time.sleep(0.2)
         Debug_Loopper -= 1
         if Debug_Loopper <= 0:
-            print("Water Temp: " + Water_temp + ", High Temp: " + High_Water_Temp)
+            print("Water Temp: " + str(Water_temp) + ", High Temp: " + str(High_Water_Temp))
             Debug_Loopper = Debug_Looper_Reps
     else:
         time.sleep(0.1)
