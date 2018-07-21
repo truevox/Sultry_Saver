@@ -122,11 +122,12 @@ CopyToCPX(SourceFileName, DestinationFileName:=0, DestinationFolder:="D:\") ;TOD
     DestinationFull := DestinationFolder . DestinationFileName
     BackupFull := DestinationFileName . ".bak"
     Progress, w250,,, Please hold - Copying %SourceFileName%…
-    Progress,
-    FileCopy, %DestinationFull%, %BackupFull%, 1
+    Progress, 10
+    sleep, 100
     Progress, 35
-    FileCopy, %SourceFileName%, %DestinationFull%, 1
+    FileCopy, %DestinationFull%, %BackupFull%, 1
     Progress, 65
+    FileCopy, %SourceFileName%, %DestinationFull%, 1
     Progress, 100
     Progress, Off
     return "Copied " . SourceFileName . " to " . DestinationFull
@@ -164,7 +165,8 @@ SetTitleMatchMode, 1
             RunningTotal.Push(CopySuccessFile)
         }
     }
-    msgbox, , , % substr(RunningTotal, 3), 0.5
+    msgbox, , , % substr(RunningTotal, 3), 1
+    RunningTotal := ""
     return
 }
 
@@ -181,7 +183,8 @@ SetTitleMatchMode, 1
             RunningTotal.Push(CopySuccessFile)
         }
     }
-    msgbox, , , % substr(RunningTotal, 3), 0.5
+    msgbox, , , % substr(RunningTotal, 3), 1
+    RunningTotal := ""
     return
 }
 
@@ -197,6 +200,15 @@ SetTitleMatchMode, 2
 :Z*:===::- [ ] ` ;c Swaps --- (or ===) for - [ ]  when ever it's typed into Atom.
 :Z*:---::- [ ] `
 :Z*:msgb::msgbox `%{Space}{Del}
+
+; Stub for future work:
+; https://www.autohotkey.com/download/AutoCorrect.ahk
+
+^+#a::
+{
+    Run AutoCorrect.ahk
+    return
+}
 
 
 /*
