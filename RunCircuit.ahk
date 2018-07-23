@@ -62,11 +62,36 @@ for index, LegalFileName in LegalFile ; Enumeration is the recommended approach 
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
 ;main.py — C:\Users\truevox\Documents\Code\Sultry_Saver — Atom
 ;main.py — C:\Users\truevox\Documents\Code\Sultry_Saver — Atom..
 ;          C:\Users\truevox\Documents\Code\Sultry_Saver
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+; iconx: Change the tray icon displayed for each of your scripts so you can keep track of which is which.
+; Also now changes the icon of a compiled script (.exe)  < ICON [I_Icon] >
+; Write up by KraZe_EyE Inspired by code seen in DirMenu.ahk (highly recommended)
+; -http://www.autohotkey.com/board/topic/91109-favorite-folders-popup-menu-with-gui/
+
+;- http://www.autohotkey.com/board/topic/121982-how-to-give-your-scripts-unique-icons-in-the-windows-tray/
+;- http://www.iconarchive.com/show/multipurpose-alphabet-icons-by-hydrattz.html
+;  Please note that this icon pack is not available for commercial use!
+
+; If you wish to have a different icon for this script to distinguish it from other scripts in the tray.
+; Provide the filepath/name below (leave blank to have it default to the usual 'H' all AHK scripts have).
+
+; COLOR LISTING FILENAMES: BLACK, BLUE, GOLD, GREY, ORANGE, PINK, RED, VIOLET, LIGHTGREEN==lg, DARKGREEN==dg
+;							File Directory\*LETTER DESIRED*\COLOR.ico
+
+I_Icon = C:\Program Files\AutoHotkey\Letter Icons\K\grey.ico
+ICON [I_Icon]                        ;Changes a compiled script's icon (.exe)
+if I_Icon <>
+IfExist, %I_Icon%
+	Menu, Tray, Icon, %I_Icon%   ;Changes menu tray icon
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 */
 
 ;==========================================================
@@ -84,10 +109,27 @@ NewVer = 0
 
 
 ;==========================================================
-;### Universal Hotkeys
+;### Universal Hotkeys/Documentation
 ;==========================================================
 
-:Z*:restartdocker::docker-compose -f ~/docker/docker-compose.yml up -d
+### General Linux
+
+::restartdocker:: sudo netstat -tulpn | grep LISTEN   ; You can manually see all the ports that are currently listening/taken
+
+
+### Docker Related
+
+::restartdocker::docker-compose -f ~/docker/docker-compose.yml up -d    ; run this every time I do something to a container or mess with docker-compose.yml
+::seecontainers::docker ps -a
+::seedockerlogs::docker-compose logs
+::stopcontainer::docker-compose stop `; CONTAINER-NAME
+::teardowndocker::docker-compose -f ~/docker/docker-compose.yml down    ; This SHOULD be safe, just run restartdocker to get it all right back (in theory)
+::cleandocker1::docker sytem prune       ; Remember, one of the biggest benefits of Docker is that it is extremely hard to mess up your host operating
+::cleandocker2::docker image prune       ; system. So you can create and destroy containers at will. But over time leftover Docker images, containers,
+::cleandocker3::docker volume prune      ; and volumes can take several GBs of space. So at any time you can run the following clean up scripts and re-run your docker-compose as described above.
+::cleandocker3::docker volume prune
+
+
 
 ; `%{Space}{Del}
 
@@ -213,7 +255,7 @@ SetTitleMatchMode, 2
 #IfWinActive, ahk_exe atom.exe
 
 :Z*:===::- [ ] ` ;c Swaps --- (or ===) for - [ ]  when ever it's typed into Atom.
-:Z*:---::- [ ] `
+:Z*:---::- [ ] ` ; Z* = (Z=reset hotstring rec (good for strings of hotstrings)) + (*=execute once last character is typed)
 :Z*:msgb::msgbox `%{Space}{Del}
 
 
