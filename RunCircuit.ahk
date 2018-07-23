@@ -60,6 +60,13 @@ for index, LegalFileName in LegalFile ; Enumeration is the recommended approach 
     MsgBox % "Legal File Name number " . index . " is " . LegalFileName
 }
 
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+;main.py — C:\Users\truevox\Documents\Code\Sultry_Saver — Atom
+;main.py — C:\Users\truevox\Documents\Code\Sultry_Saver — Atom..
+;          C:\Users\truevox\Documents\Code\Sultry_Saver
+
 */
 
 ;==========================================================
@@ -75,13 +82,24 @@ CurrentVer = 0
 NewVer = 0
 ;SetBatchLines, -1	; Runs the script at max speed, default is 10 or 20 ms
 
+
+;==========================================================
+;### Universal Hotkeys
+;==========================================================
+
+:Z*:restartdocker::docker-compose -f ~/docker/docker-compose.yml up -d
+
+; `%{Space}{Del}
+
+
+;==========================================================
+;### Rest of code
+;==========================================================
+
 LegalFile := ["main.py", "bearlibs.py"]
 RunningTotal := ""
 
 
-;main.py — C:\Users\truevox\Documents\Code\Sultry_Saver — Atom
-;main.py — C:\Users\truevox\Documents\Code\Sultry_Saver — Atom..
-;          C:\Users\truevox\Documents\Code\Sultry_Saver
 
 ;If it matches the /dir/me/code/ #IfWinActive WinTitle, WinText code (Set title match mode 2, don't forget) then ~Ctrl S will run. This then loops through an if then statement that uses WinActive() to test fo win in the array.
 
